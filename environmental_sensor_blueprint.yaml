@@ -1,0 +1,55 @@
+blueprint:
+  name: MQTT Publish for Sensor
+  description: Publishes sensor data along with static information via MQTT
+  domain: automation
+  input:
+    temperature_sensor:
+      name: Temperature Sensor
+      selector:
+        entity:
+          domain: sensor
+    humidity_sensor:
+      name: Humidity Sensor
+      selector:
+        entity:
+          domain: sensor
+    pressure_sensor:
+      name: Pressure Sensor
+      selector:
+        entity:
+          domain: sensor
+    static_application_id:
+      name: Application ID
+      default: "AEROS"
+    static_site_id:
+      name: Site ID
+      default: "OTE-ACADEMY"
+    static_room_id:
+      name: Room ID
+      default: "R104"
+    static_device_id:
+      name: Device ID
+      default: "10404062822"
+    mqtt_topic:
+      name: MQTT Topic
+      default: "monitor_testing/AEROS"
+
+trigger:
+  - platform: state
+    entity_id: !input temperature_sensor
+
+action:
+  - service: mqtt.publish
+    data:
+      topic: !input mqtt_topic
+      payload: >-
+        {
+          "application_id": "{{ static_application_id }}",
+          "site_id": "{{ static_site_id }}",
+          "room_id": "{{ static_room_id }}",
+          "device_id": "{{ static_device_id }}",
+          "temperature": "{{ states[temperature_sensor].state | float }}",
+          "humidity": "{{ states[humidity_sensor].state | float }}",
+          "pressure": "{{ states[pressure_sensor].state | float }}",
+          "msg_timestamp": "{{ now() }}"
+        }
