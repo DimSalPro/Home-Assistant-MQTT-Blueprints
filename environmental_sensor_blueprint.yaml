@@ -42,7 +42,7 @@ action:
   - service: mqtt.publish
     data:
       topic: !input mqtt_topic
-      payload: >-
+      payload_template: |-
         {
           "application_id": "{{ static_application_id }}",
           "site_id": "{{ static_site_id }}",
@@ -52,3 +52,4 @@ action:
           "humidity": "{{ states.humidity_sensor.state | float }}",
           "pressure": "{{ states.pressure_sensor.state | float }}"
         }
+mode: single
