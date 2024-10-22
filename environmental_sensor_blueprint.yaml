@@ -1,5 +1,5 @@
 blueprint:
-  name: MQTT Publish for Environmental Sensor (T, H , P)
+  name: MQTT Publish for Environmental Sensor (Temperature, Humidity)
   description: Publishes sensor data along with static information via MQTT
   domain: automation
   input:
@@ -28,9 +28,21 @@ blueprint:
     static_room_id:
       name: Room ID
       default: test
+    static_floor_id:
+      name: Floor Number
+      default: 1
     static_device_id:
       name: Device ID
       default: test
+    static_placement:
+      name: Placement
+      default: indoors
+    static_municipality:
+      name: Municipality
+      default: Marousi
+    static_device_type:
+      name: Device Type
+      default: environmental
     mqtt_topic:
       name: MQTT Topic
       default: monitor_testing/dimitris
@@ -38,25 +50,25 @@ blueprint:
 variables:
   temperature_sensor: !input temperature_sensor
   humidity_sensor: !input humidity_sensor
-  static_application_id: !input static_application_id
-  static_site_id: !input static_site_id
-  static_room_id: !input static_room_id
-  static_device_id: !input static_device_id
+  application_id: !input static_application_id
+  site_id: !input static_site_id
+  room_id: !input static_room_id
+  device_id: !input static_device_id
   temperature: '{{ expand(temperature_sensor)[0].state | float(temperature) }}'
   humidity: '{{ expand(humidity_sensor)[0].state | float(humidity) }}'
 trigger:
 - platform: time_pattern
-  seconds: /15
+  seconds: /30
 action:
 - service: mqtt.publish
   data:
     topic: !input mqtt_topic
     payload: >
         {
-          "application_id": "{{ static_application_id }}",
-          "site_id": "{{ static_site_id }}",
-          "room_id": "{{ static_room_id }}",
-          "device_id": "{{ static_device_id }}",
+          "application_id": "{{ application_id }}",
+          "site_id": "{{ site_id }}",
+          "room_id": "{{ room_id }}",
+          "device_id": "{{ device_id }}",
           "temperature": {{ temperature }},
           "humidity": {{ humidity }}
         }
