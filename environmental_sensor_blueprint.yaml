@@ -1,5 +1,5 @@
 blueprint:
-  name: MQTT Publish for Sensor
+  name: MQTT Publish for Environmental Sensor (T, H , P)
   description: Publishes sensor data along with static information via MQTT
   domain: automation
   input:
@@ -48,8 +48,7 @@ action:
           "site_id": "{{ static_site_id }}",
           "room_id": "{{ static_room_id }}",
           "device_id": "{{ static_device_id }}",
-          "temperature": "{{ states[temperature_sensor].state | float }}",
-          "humidity": "{{ states[humidity_sensor].state | float }}",
-          "pressure": "{{ states[pressure_sensor].state | float }}",
-          "msg_timestamp": "{{ now() }}"
+          "temperature": "{{ states.temperature_sensor.state | float }}",
+          "humidity": "{{ states.humidity_sensor.state | float }}",
+          "pressure": "{{ states.pressure_sensor.state | float }}"
         }
