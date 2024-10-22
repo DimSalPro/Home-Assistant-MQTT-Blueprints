@@ -35,8 +35,8 @@ blueprint:
       default: "monitor_testing/AEROS"
 
 trigger:
-  - platform: state
-    entity_id: !input temperature_sensor
+  - platform: time_pattern
+    seconds: /15
 
 action:
   - service: mqtt.publish
