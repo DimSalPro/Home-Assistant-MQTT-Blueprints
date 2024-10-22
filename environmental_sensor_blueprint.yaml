@@ -8,42 +8,56 @@ blueprint:
       selector:
         entity:
           filter:
-            device_class: temperature
+          - device_class:
+            - temperature
           multiple: false
     humidity_sensor:
       name: Humidity Sensor
       selector:
         entity:
           filter:
-            device_class: humidity
+          - device_class:
+            - humidity
           multiple: false
     static_application_id:
       name: Application ID
-      default: "test"
+      default: test
     static_site_id:
       name: Site ID
-      default: "test"
+      default: test
     static_room_id:
       name: Room ID
-      default: "test"
+      default: test
     static_device_id:
       name: Device ID
-      default: "test"
+      default: test
     mqtt_topic:
       name: MQTT Topic
-      default: "monitor_testing/dimitris"
-
+      default: monitor_testing/dimitris
+  source_url: https://github.com/DimSalPro/Home-Assistant-MQTT-Blueprints/blob/main/environmental_sensor_blueprint.yaml
+variables:
+  temperature_sensor: !input temperature_sensor
+  humidity_sensor: !input humidity_sensor
+  static_application_id: !input static_application_id
+  static_site_id: !input static_site_id
+  static_room_id: !input static_room_id
+  static_device_id: !input static_device_id
+  temperature: '{{ expand(temperature_sensor)[0].state | float(temperature) }}'
+  humidity: '{{ expand(humidity_sensor)[0].state | float(humidity) }}'
 trigger:
-  - platform: time_pattern
-    seconds: /15
-
+- platform: time_pattern
+  seconds: /15
 action:
-  - service: mqtt.publish
-    data:
-      topic: !input mqtt_topic
-      payload_template: |-
+- service: mqtt.publish
+  data:
+    topic: !input mqtt_topic
+    payload: >
         {
-          "application_id": "static_application_id",
-          "humidity": "{{ states(temperature_sensor) }}"
+          "application_id": "{{ static_application_id }}",
+          "site_id": "{{ static_site_id }}",
+          "room_id": "{{ static_room_id }}",
+          "device_id": "{{ static_device_id }}",
+          "temperature": {{ temperature }},
+          "humidity": {{ humidity }}
         }
 mode: single
