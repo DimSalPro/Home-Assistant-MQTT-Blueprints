@@ -7,32 +7,31 @@ blueprint:
       name: Temperature Sensor
       selector:
         entity:
-          domain: sensor
+          filter:
+            device_class: temperature
+          multiple: false
     humidity_sensor:
       name: Humidity Sensor
       selector:
         entity:
-          domain: sensor
-    pressure_sensor:
-      name: Pressure Sensor
-      selector:
-        entity:
-          domain: sensor
+          filter:
+            device_class: humidity
+          multiple: false
     static_application_id:
       name: Application ID
-      default: "AEROS"
+      default: "test"
     static_site_id:
       name: Site ID
-      default: "OTE-ACADEMY"
+      default: "test"
     static_room_id:
       name: Room ID
-      default: "R104"
+      default: "test"
     static_device_id:
       name: Device ID
-      default: "10404062822"
+      default: "test"
     mqtt_topic:
       name: MQTT Topic
-      default: "monitor_testing/AEROS"
+      default: "monitor_testing/dimitris"
 
 trigger:
   - platform: time_pattern
@@ -48,8 +47,6 @@ action:
           "site_id": "{{ static_site_id }}",
           "room_id": "{{ static_room_id }}",
           "device_id": "{{ static_device_id }}",
-          "temperature": "{{ states.temperature_sensor.state | float }}",
-          "humidity": "{{ states.humidity_sensor.state | float }}",
-          "pressure": "{{ states.pressure_sensor.state | float }}"
+          "humidity": "{{ states(temperature_sensor) }}"
         }
 mode: single
