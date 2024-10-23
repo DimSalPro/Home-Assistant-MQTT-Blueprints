@@ -44,11 +44,6 @@ blueprint:
             - moving
     static_controllable:
       name: Controllable
-      selector:
-        select:
-          options:
-            - true
-            - false
     static_municipality:
       name: Municipality
       default: ""
