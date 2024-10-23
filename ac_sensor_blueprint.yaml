@@ -92,8 +92,8 @@ variables:
   municipality: '{{ static_municipality | default("-") | replace(" ", "") | lower }}'
   device_type: '{{ static_device_type | default("-") | replace(" ", "") | lower }}'
   ac_program: '{{ expand(switch_sensor)[0].state }}'
-  ac_temperature: '{{ expand(switch_sensor)[0].temperature | float }}'
-  ac_fan: '{{ expand(switch_sensor)[0].fan_mode }}'
+  ac_temperature: '{{ state_attr(switch_sensor, "temperature") }}'
+  ac_fan: '{{ state_attr(switch_sensor, "fan_mode" }}'
   power: >
     {% if power_sensor != "" %}
       {{ expand(power_sensor)[0].state | float }}
