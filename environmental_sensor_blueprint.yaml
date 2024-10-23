@@ -47,8 +47,8 @@ blueprint:
       selector:
         select:
           options:
-            - "yes"
-            - "no"
+            - true
+            - false
     static_municipality:
       name: Municipality
       default: ""
