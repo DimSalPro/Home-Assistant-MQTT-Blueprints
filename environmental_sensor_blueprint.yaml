@@ -49,6 +49,7 @@ blueprint:
           options:
             - controllable
             - not_controllable
+      default: not_controllable
     static_municipality:
       name: Municipality
       default: ""
