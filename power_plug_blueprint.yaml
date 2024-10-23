@@ -93,13 +93,13 @@ variables:
   device_type: '{{ static_device_type | default("-") | replace(" ", "") | lower }}'
   switch: '{{ expand(switch_sensor)[0].state }}'
   power: >
-    {% if power_sensor %}
+    {% if power_sensor != "" %}
       {{ expand(power_sensor)[0].state | float }}
     {% else %}
       none
     {% endif %}
   energy: >
-    {% if energy_sensor %}
+    {% if energy_sensor != "" %}
       {{ expand(energy_sensor)[0].state | float }}
     {% else %}
       none
