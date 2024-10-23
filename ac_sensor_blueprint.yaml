@@ -18,6 +18,8 @@ blueprint:
           filter:
           - device_class:
             - power
+          - domain:
+            - sensor
           multiple: false
       default: ""
     energy_sensor:
@@ -27,6 +29,8 @@ blueprint:
           filter:
           - device_class:
             - energy
+          - domain:
+            - sensor
           multiple: false
       default: ""
     static_application_id:
