@@ -88,7 +88,7 @@ variables:
     {% elif static_controllable == 'no' %}
       -1
     {% else %}
-      0  # Optionally handle unexpected input
+      0
     {% endif %}
 
 trigger:
