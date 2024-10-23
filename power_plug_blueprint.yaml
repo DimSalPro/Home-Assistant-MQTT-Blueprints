@@ -12,7 +12,7 @@ blueprint:
             - switch
           multiple: false
     power_sensor:
-      name: Power
+      name: Power (if provided)
       selector:
         entity:
           filter:
@@ -21,7 +21,7 @@ blueprint:
           multiple: false
       default: ""
     energy_sensor:
-      name: Energy
+      name: Energy (if provided)
       selector:
         entity:
           filter:
