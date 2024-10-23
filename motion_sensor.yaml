@@ -1,10 +1,10 @@
 blueprint:
-  name: MQTT Publish for Motion Sensor (State)
+  name: MQTT Publish for Motion/Door Sensor (State)
   description: Publishes sensor data along with static information via MQTT
   domain: automation
   input:
     motion_sensor:
-      name: Motion Sensor
+      name: Motion/Door Sensor
       selector:
         entity:
           filter:
@@ -88,14 +88,6 @@ variables:
     {% else %}
       0
     {% endif %}
-  motion_status: >
-    {% if motion == 'on' %}
-      open
-    {% elif motion == 'off' %}
-      closed
-    {% else %}
-      unavailable
-    {% endif %}
 
 trigger:
   - platform: state
@@ -125,7 +117,6 @@ action:
                 "municipality": "{{ municipality }}",
                 "device_type": "{{ device_type }}",
                 "controllable": {{ controllable }},
-                "status": "{{ motion_status }}",
                 "state": {{ motion_state }}
               }
     else:
@@ -148,7 +139,6 @@ action:
                     "municipality": "{{ municipality }}",
                     "device_type": "{{ device_type }}",
                     "controllable": {{ controllable }},
-                    "status": "{{ motion_status }}",
                     "state": {{ motion_state }}
                   }
 
