@@ -36,10 +36,15 @@ blueprint:
       default: ""
     static_placement:
       name: Placement
-      default: ""
+      selector:
+        select:
+          options:
+            - indoors
+            - outdoors
+            - ""
     static_municipality:
-      name: ""
-      default: Marousi
+      name: Municipality
+      default: ""
     static_device_type:
       name: Device Type
       default: environmental
