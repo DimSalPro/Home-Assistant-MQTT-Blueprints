@@ -1,1 +1,156 @@
+blueprint:
+  name: MQTT Publish for Fan Sensors (State, Power, Energy)
+  description: Publishes sensor data along with static information via MQTT
+  domain: automation
+  input:
+    switch_sensor:
+      name: HVAC
+      selector:
+        entity:
+          filter:
+          - domain:
+            - fan
+          multiple: false
+    power_sensor:
+      name: Power (if provided)
+      selector:
+        entity:
+          filter:
+          - device_class:
+            - power
+          multiple: false
+      default: ""
+    energy_sensor:
+      name: Energy (if provided)
+      selector:
+        entity:
+          filter:
+          - device_class:
+            - energy
+          multiple: false
+      default: ""
+    static_application_id:
+      name: Application ID
+      default: ""
+    static_site_id:
+      name: Site ID
+      default: ""
+    static_room_id:
+      name: Room ID
+      default: ""
+    static_floor_id:
+      name: Floor Number
+      default: ""
+    static_device_id:
+      name: Device ID
+      default: ""
+    static_placement:
+      name: Placement
+      selector:
+        select:
+          options:
+            - indoors
+            - outdoors
+            - moving
+    static_controllable:
+      name: Controllable
+      selector:
+        select:
+          options:
+            - controllable
+            - not_controllable
+      default: controllable
+    static_municipality:
+      name: Municipality
+      default: ""
+    static_device_type:
+      name: Device Type
+      selector:
+        select:
+          options:
+            - air_purifier
+            - dehumidifier
+            - humidifier
+    mqtt_topic:
+      name: MQTT Topic
+      default: monitor_testing/dimitris
+  source_url: https://github.com/DimSalPro/Home-Assistant-MQTT-Blueprints/blob/main/environmental_sensor_blueprint.yaml
 
+variables:
+  switch_sensor: !input switch_sensor
+  power_sensor: !input power_sensor
+  energy_sensor: !input energy_sensor
+  static_application_id: !input static_application_id
+  static_site_id: !input static_site_id
+  static_room_id: !input static_room_id
+  static_floor_id: !input static_floor_id
+  static_device_id: !input static_device_id
+  static_placement: !input static_placement
+  static_municipality: !input static_municipality
+  static_device_type:  !input static_device_type
+  static_controllable: !input static_controllable
+  application_id: '{{ static_application_id | default("-") | replace(" ", "") | lower }}'
+  site_id: '{{ static_site_id | default("-") | replace(" ", "") | lower }}'
+  room_id: '{{ static_room_id | default("-") | replace(" ", "") | lower }}'
+  floor_id: '{{ static_floor_id | default("-") | replace(" ", "") | lower }}'
+  device_id: '{{ static_device_id | default("-") | replace(" ", "") | lower }}'
+  placement: '{{ static_placement | default("-") | replace(" ", "") | lower }}'
+  municipality: '{{ static_municipality | default("-") | replace(" ", "") | lower }}'
+  device_type: '{{ static_device_type | default("-") | replace(" ", "") | lower }}'
+  switch: '{{ expand(switch_sensor)[0].state }}'
+  power: >
+    {% if power_sensor != "" %}
+      {{ expand(power_sensor)[0].state | float }}
+    {% else %}
+      none
+    {% endif %}
+  energy: >
+    {% if energy_sensor != "" %}
+      {{ expand(energy_sensor)[0].state | float }}
+    {% else %}
+      none
+    {% endif %}
+  controllable: >
+    {% if static_controllable == 'controllable' %}
+      1
+    {% elif static_controllable == 'not_controllable' %}
+      -1
+    {% else %}
+      0
+    {% endif %}
+  switch_state: >
+    {% if switch == 'off' %}
+      -1
+    {% else %}
+      1
+    {% endif %}
+
+trigger:
+  - platform: state
+    entity_id:
+      - !input switch_sensor
+    to: null
+  - platform: time_pattern
+    seconds: /30
+
+action:
+  - service: mqtt.publish
+    data:
+      topic: !input mqtt_topic
+      payload: >
+        {
+          "application_id": "{{ application_id }}",
+          "site_id": "{{ site_id }}",
+          "room_id": "{{ room_id }}",
+          "floor_id": "{{ floor_id }}",
+          "device_id": "{{ device_id }}",
+          "placement": "{{ placement }}",
+          "municipality": "{{ municipality }}",
+          "device_type": "{{ device_type }}",
+          "controllable": {{ controllable }},
+          "state": {{ switch_state }}{% if power_sensor != "" %},
+          "power": {{ power }}{% endif %}{% if energy_sensor != "" %},
+          "energy": {{ energy }}{% endif %}
+         }
+
+mode: single
