@@ -1,23 +1,15 @@
 blueprint:
-  name: MQTT Publish for Environmental Sensor (Temperature, Humidity)
+  name: MQTT Publish for Motion Sensor (State)
   description: Publishes sensor data along with static information via MQTT
   domain: automation
   input:
-    temperature_sensor:
-      name: Temperature Sensor
+    motion_sensor:
+      name: Motion Sensor
       selector:
         entity:
           filter:
-          - device_class:
-            - temperature
-          multiple: false
-    humidity_sensor:
-      name: Humidity Sensor
-      selector:
-        entity:
-          filter:
-          - device_class:
-            - humidity
+          - domain:
+            - binary_sensor
           multiple: false
     static_application_id:
       name: Application ID
@@ -61,8 +53,7 @@ blueprint:
   source_url: https://github.com/DimSalPro/Home-Assistant-MQTT-Blueprints/blob/main/environmental_sensor_blueprint.yaml
 
 variables:
-  temperature_sensor: !input temperature_sensor
-  humidity_sensor: !input humidity_sensor
+  motion_sensor: !input motion_sensor
   static_application_id: !input static_application_id
   static_site_id: !input static_site_id
   static_room_id: !input static_room_id
@@ -80,8 +71,7 @@ variables:
   placement: '{{ static_placement | default("-") | replace(" ", "") | lower }}'
   municipality: '{{ static_municipality | default("-") | replace(" ", "") | lower }}'
   device_type: '{{ static_device_type | default("-") | replace(" ", "") | lower }}'
-  temperature: '{{ expand(temperature_sensor)[0].state | float }}'
-  humidity: '{{ expand(humidity_sensor)[0].state | float }}'
+  motion: '{{ expand(motion_sensor)[0].state }}'
   controllable: >
     {% if static_controllable == 'controllable' %}
       1
@@ -110,8 +100,7 @@ action:
           "municipality": "{{ municipality }}",
           "device_type": "{{ device_type }}",
           "controllable": {{ controllable }},
-          "temperature": {{ temperature }},
-          "humidity": {{ humidity }}
+          "state": {{ motion }}
         }
 
 mode: single
