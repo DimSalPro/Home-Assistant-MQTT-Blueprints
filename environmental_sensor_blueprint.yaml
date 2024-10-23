@@ -47,9 +47,8 @@ blueprint:
       selector:
         select:
           options:
-            - indoors
-            - outdoors
-            - moving
+            - yes
+            - no
     static_municipality:
       name: Municipality
       default: ""
