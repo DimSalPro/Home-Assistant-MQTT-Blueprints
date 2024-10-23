@@ -47,8 +47,8 @@ blueprint:
       selector:
         select:
           options:
-            - true
-            - false
+            - true_dbf
+            - false_dbf
     static_municipality:
       name: Municipality
       default: ""
