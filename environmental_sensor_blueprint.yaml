@@ -21,24 +21,24 @@ blueprint:
           multiple: false
     static_application_id:
       name: Application ID
-      default: test
+      default: ""
     static_site_id:
       name: Site ID
-      default: test
+      default: ""
     static_room_id:
       name: Room ID
-      default: test
+      default: ""
     static_floor_id:
       name: Floor Number
-      default: 1
+      default: ""
     static_device_id:
       name: Device ID
-      default: test
+      default: ""
     static_placement:
       name: Placement
-      default: indoors
+      default: ""
     static_municipality:
-      name: Municipality
+      name: ""
       default: Marousi
     static_device_type:
       name: Device Type
