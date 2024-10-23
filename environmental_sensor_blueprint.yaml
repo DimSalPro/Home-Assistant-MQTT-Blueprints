@@ -47,29 +47,41 @@ blueprint:
       name: MQTT Topic
       default: monitor_testing/dimitris
   source_url: https://github.com/DimSalPro/Home-Assistant-MQTT-Blueprints/blob/main/environmental_sensor_blueprint.yaml
+
 variables:
   temperature_sensor: !input temperature_sensor
   humidity_sensor: !input humidity_sensor
   application_id: !input static_application_id
   site_id: !input static_site_id
   room_id: !input static_room_id
+  floor_id: !input static_floor_id
   device_id: !input static_device_id
-  temperature: '{{ expand(temperature_sensor)[0].state | float(temperature) }}'
-  humidity: '{{ expand(humidity_sensor)[0].state | float(humidity) }}'
+  placement: !input static_placement
+  municipality: !input static_municipality
+  device_type: !input static_device_type
+  temperature: '{{ expand(temperature_sensor)[0].state | float }}'
+  humidity: '{{ expand(humidity_sensor)[0].state | float }}'
+
 trigger:
-- platform: time_pattern
-  seconds: /30
+  - platform: time_pattern
+    seconds: /30
+
 action:
-- service: mqtt.publish
-  data:
-    topic: !input mqtt_topic
-    payload: >
+  - service: mqtt.publish
+    data:
+      topic: !input mqtt_topic
+      payload: >
         {
           "application_id": "{{ application_id }}",
           "site_id": "{{ site_id }}",
           "room_id": "{{ room_id }}",
+          "floor_id": "{{ floor_id }}",
           "device_id": "{{ device_id }}",
+          "placement": "{{ placement }}",
+          "municipality": "{{ municipality }}",
+          "device_type": "{{ device_type }}",
           "temperature": {{ temperature }},
           "humidity": {{ humidity }}
         }
+
 mode: single
