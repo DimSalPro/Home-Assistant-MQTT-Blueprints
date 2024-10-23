@@ -131,25 +131,25 @@ trigger:
 
 action:
   - service: mqtt.publish
-      data:
-        topic: !input mqtt_topic
-        payload: >
-          {
-            "application_id": "{{ application_id }}",
-            "site_id": "{{ site_id }}",
-            "room_id": "{{ room_id }}",
-            "floor_id": "{{ floor_id }}",
-            "device_id": "{{ device_id }}",
-            "placement": "{{ placement }}",
-            "municipality": "{{ municipality }}",
-            "device_type": "{{ device_type }}",
-            "controllable": {{ controllable }},
-            "ac_program": {{ ac_program }},
-            "ac_target_temperature": {{ ac_temperature }},
-            "ac_fan_mode": {{ ac_fan }},
-            "state": {{ ac_state }}{% if power_sensor != "" %},
-            "power": {{ power }}{% endif %}{% if energy_sensor != "" %},
-            "energy": {{ energy }}{% endif %}
-          }
+    data:
+      topic: !input mqtt_topic
+      payload: >
+        {
+          "application_id": "{{ application_id }}",
+          "site_id": "{{ site_id }}",
+          "room_id": "{{ room_id }}",
+          "floor_id": "{{ floor_id }}",
+          "device_id": "{{ device_id }}",
+          "placement": "{{ placement }}",
+          "municipality": "{{ municipality }}",
+          "device_type": "{{ device_type }}",
+          "controllable": {{ controllable }},
+          "ac_program": {{ ac_program }},
+          "ac_target_temperature": {{ ac_temperature }},
+          "ac_fan_mode": {{ ac_fan }},
+          "state": {{ ac_state }}{% if power_sensor != "" %},
+          "power": {{ power }}{% endif %}{% if energy_sensor != "" %},
+          "energy": {{ energy }}{% endif %}
+        }
 
 mode: single
