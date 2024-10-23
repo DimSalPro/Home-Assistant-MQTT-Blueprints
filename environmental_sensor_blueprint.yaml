@@ -56,14 +56,14 @@ blueprint:
 variables:
   temperature_sensor: !input temperature_sensor
   humidity_sensor: !input humidity_sensor
-  application_id: !input static_application_id
-  site_id: !input static_site_id
-  room_id: !input static_room_id
-  floor_id: !input static_floor_id
-  device_id: !input static_device_id
-  placement: !input static_placement
-  municipality: !input static_municipality
-  device_type: !input static_device_type
+  application_id: '{{ !input static_application_id | default("-") | replace(" ", "") | lower }}'
+  site_id: '{{ !input static_site_id | default("-") | replace(" ", "") | lower }}'
+  room_id: '{{ !input static_room_id | default("-") | replace(" ", "") | lower }}'
+  floor_id: '{{ !input static_floor_id | default("-") | replace(" ", "") | lower }}'
+  device_id: '{{ !input static_device_id | default("-") | replace(" ", "") | lower }}'
+  placement: '{{ !input static_placement | default("-") | replace(" ", "") | lower }}'
+  municipality: '{{ !input static_municipality | default("-") | replace(" ", "") | lower }}'
+  device_type: '{{ !input static_device_type | default("-") | replace(" ", "") | lower }}'
   temperature: '{{ expand(temperature_sensor)[0].state | float }}'
   humidity: '{{ expand(humidity_sensor)[0].state | float }}'
 
