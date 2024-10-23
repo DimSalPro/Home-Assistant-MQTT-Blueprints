@@ -38,6 +38,7 @@ blueprint:
       name: Placement
       selector:
         select:
+        mode: dropdown
           options:
             - indoors
             - outdoors
