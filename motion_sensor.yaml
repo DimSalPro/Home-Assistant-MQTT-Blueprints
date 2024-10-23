@@ -82,25 +82,58 @@ variables:
     {% endif %}
 
 trigger:
+  - platform: state
+    entity_id:
+      - motion_sensor
+    to: null
   - platform: time_pattern
     seconds: /30
 
 action:
-  - service: mqtt.publish
-    data:
-      topic: !input mqtt_topic
-      payload: >
-        {
-          "application_id": "{{ application_id }}",
-          "site_id": "{{ site_id }}",
-          "room_id": "{{ room_id }}",
-          "floor_id": "{{ floor_id }}",
-          "device_id": "{{ device_id }}",
-          "placement": "{{ placement }}",
-          "municipality": "{{ municipality }}",
-          "device_type": "{{ device_type }}",
-          "controllable": {{ controllable }},
-          "state": {{ motion }}
-        }
+  - if:
+      - condition: state
+        entity_id: motion_sensor
+        state: "on"
+    then:
+        - service: mqtt.publish
+          data:
+            topic: !input mqtt_topic
+            payload: >
+              {
+                "application_id": "{{ application_id }}",
+                "site_id": "{{ site_id }}",
+                "room_id": "{{ room_id }}",
+                "floor_id": "{{ floor_id }}",
+                "device_id": "{{ device_id }}",
+                "placement": "{{ placement }}",
+                "municipality": "{{ municipality }}",
+                "device_type": "{{ device_type }}",
+                "controllable": {{ controllable }},
+                "status": "{{ motion }}",
+                "state": {{ 1 }}
+              }
+    else:
+      - if:
+          - condition: state
+            entity_id: motion_sensor
+            state: "off"
+        then:
+            - service: mqtt.publish
+              data:
+                topic: !input mqtt_topic
+                payload: >
+                  {
+                    "application_id": "{{ application_id }}",
+                    "site_id": "{{ site_id }}",
+                    "room_id": "{{ room_id }}",
+                    "floor_id": "{{ floor_id }}",
+                    "device_id": "{{ device_id }}",
+                    "placement": "{{ placement }}",
+                    "municipality": "{{ municipality }}",
+                    "device_type": "{{ device_type }}",
+                    "controllable": {{ controllable }},
+                    "status": "{{ motion }}",
+                    "state": {{ -1 }}
+                  }
 
 mode: single
