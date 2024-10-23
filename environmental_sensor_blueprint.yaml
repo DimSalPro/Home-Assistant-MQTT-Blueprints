@@ -44,6 +44,11 @@ blueprint:
             - moving
     static_controllable:
       name: Controllable
+      selector:
+        select:
+          options:
+            - controllable
+            - not_controllable
     static_municipality:
       name: Municipality
       default: ""
@@ -78,9 +83,9 @@ variables:
   temperature: '{{ expand(temperature_sensor)[0].state | float }}'
   humidity: '{{ expand(humidity_sensor)[0].state | float }}'
   controllable: >
-    {% if static_controllable == 'yes' %}
+    {% if static_controllable == 'controllable' %}
       1
-    {% elif static_controllable == 'no' %}
+    {% elif static_controllable == 'not_controllable' %}
       -1
     {% else %}
       0
