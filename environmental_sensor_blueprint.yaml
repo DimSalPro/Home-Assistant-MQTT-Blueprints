@@ -21,7 +21,7 @@ blueprint:
           multiple: false
     static_application_id:
       name: Application ID
-      placeholder: "Project Name"
+      default: ""
     static_site_id:
       name: Site ID
       default: ""
