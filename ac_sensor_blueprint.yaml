@@ -52,6 +52,7 @@ blueprint:
             - indoors
             - outdoors
             - moving
+      default: indoors
     static_controllable:
       name: Controllable
       selector:
@@ -59,6 +60,7 @@ blueprint:
           options:
             - controllable
             - not_controllable
+      default: controllable
     static_municipality:
       name: Municipality
       default: ""
