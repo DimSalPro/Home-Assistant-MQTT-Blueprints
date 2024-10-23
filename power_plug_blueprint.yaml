@@ -19,6 +19,7 @@ blueprint:
           - device_class:
             - power
           multiple: false
+      default: ""
     energy_sensor:
       name: Energy
       selector:
@@ -27,6 +28,7 @@ blueprint:
           - device_class:
             - energy
           multiple: false
+      default: ""
     static_application_id:
       name: Application ID
       default: ""
