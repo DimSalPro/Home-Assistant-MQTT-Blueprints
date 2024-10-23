@@ -38,11 +38,10 @@ blueprint:
       name: Placement
       selector:
         select:
-        mode: dropdown
           options:
             - indoors
             - outdoors
-            - ""
+            - moving
     static_municipality:
       name: Municipality
       default: ""
