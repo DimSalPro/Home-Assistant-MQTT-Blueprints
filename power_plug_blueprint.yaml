@@ -64,7 +64,7 @@ blueprint:
       default: ""
     static_device_type:
       name: Device Type
-      default: environmental
+      default: smart_plug
     mqtt_topic:
       name: MQTT Topic
       default: monitor_testing/dimitris
@@ -149,9 +149,9 @@ action:
                 "municipality": "{{ municipality }}",
                 "device_type": "{{ device_type }}",
                 "controllable": {{ controllable }},
-                "state": {{ switch_state }},
-                "power": {{ power }},
-                "energy": {{ energy }}
+                "state": {{ switch_state }}{% if power_sensor != "" %},
+                "power": {{ power }}{% endif %}{% if energy_sensor != "" %},
+                "energy": {{ energy }}{% endif %}
               }
     else:
       - if:
@@ -173,9 +173,9 @@ action:
                     "municipality": "{{ municipality }}",
                     "device_type": "{{ device_type }}",
                     "controllable": {{ controllable }},
-                    "state": {{ switch_state }},
-                    "power": {{ power }},
-                    "energy": {{ energy }}
+                    "state": {{ switch_state }}{% if power_sensor != "" %},
+                    "power": {{ power }}{% endif %}{% if energy_sensor != "" %},
+                    "energy": {{ energy }}{% endif %}
                   }
 
 mode: single
