@@ -1,10 +1,10 @@
 blueprint:
-  name: MQTT Publish for Motion/Door Sensor (State)
+  name: MQTT Publish for Motion/Door/Window Sensor (State)
   description: Publishes sensor data along with static information via MQTT
   domain: automation
   input:
     motion_sensor:
-      name: Motion/Door Sensor
+      name: Motion/Door/Window Sensor
       selector:
         entity:
           filter:
@@ -46,7 +46,12 @@ blueprint:
       default: ""
     static_device_type:
       name: Device Type
-      default: environmental
+      selector:
+        select:
+          options:
+            - motion_sensor
+            - door_sensor
+            - window_sensor
     mqtt_topic:
       name: MQTT Topic
       default: monitor_testing/dimitris
