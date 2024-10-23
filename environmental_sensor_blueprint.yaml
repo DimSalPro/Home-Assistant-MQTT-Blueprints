@@ -47,8 +47,9 @@ blueprint:
       selector:
         select:
           options:
-            - true_dbf
-            - false_dbf
+            - indoors
+            - outdoors
+            - moving
     static_municipality:
       name: Municipality
       default: ""
