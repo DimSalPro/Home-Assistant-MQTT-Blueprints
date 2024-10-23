@@ -92,8 +92,18 @@ variables:
   municipality: '{{ static_municipality | default("-") | replace(" ", "") | lower }}'
   device_type: '{{ static_device_type | default("-") | replace(" ", "") | lower }}'
   switch: '{{ expand(switch_sensor)[0].state }}'
-  power: '{{ expand(power_sensor)[0].state | float(power) }}'
-  energy: '{{ expand(energy_sensor)[0].state | float(energy) }}'
+  power: >
+    {% if power_sensor %}
+      {{ expand(power_sensor)[0].state | float }}
+    {% else %}
+      none
+    {% endif %}
+  energy: >
+    {% if energy_sensor %}
+      {{ expand(energy_sensor)[0].state | float }}
+    {% else %}
+      none
+    {% endif %}
   controllable: >
     {% if static_controllable == 'controllable' %}
       1
