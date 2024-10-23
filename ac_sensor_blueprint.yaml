@@ -150,6 +150,6 @@ action:
           "state": {{ ac_state }}{% if power_sensor != "" %},
           "power": {{ power }}{% endif %}{% if energy_sensor != "" %},
           "energy": {{ energy }}{% endif %}
-        }
+         }
 
 mode: single
